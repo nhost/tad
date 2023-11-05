@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 
 	"github.com/nhost/tad/cmd"
@@ -11,7 +11,8 @@ import (
 var Version string
 
 func main() {
-	app := &cli.App{
+	app := &cli.App{ //nolint:exhaustruct
+		Name:    "tad",
 		Version: Version,
 		Commands: []*cli.Command{
 			cmd.RunCommand(),
@@ -19,6 +20,7 @@ func main() {
 	}
 
 	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
 	}
 }
