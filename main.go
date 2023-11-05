@@ -16,6 +16,7 @@ func main() {
 		Version: Version,
 		Commands: []*cli.Command{
 			cmd.RunCommand(),
+			cmd.RunMD(),
 		},
 	}
 

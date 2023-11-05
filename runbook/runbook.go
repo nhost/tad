@@ -23,6 +23,13 @@ type Runbook struct {
 	Steps  []*Step `toml:"steps"`
 }
 
+func New(global *Global, steps []*Step) *Runbook {
+	return &Runbook{
+		Global: global,
+		Steps:  steps,
+	}
+}
+
 func (r *Runbook) Run(ctx context.Context, interpreter Interpreter) error {
 	for i, s := range r.Steps {
 		if err := s.Run(ctx, interpreter); err != nil {
