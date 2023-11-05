@@ -1,0 +1,67 @@
+[global]
+interpreter = "js"
+pre = """
+# Node interpreter
+"""
+
+[[steps]]
+pre = """
+# Basic console log
+"""
+exec = """
+console.log("Hello World!")
+"""
+
+[[steps]]
+pre = """
+# Set some variables
+"""
+
+exec = """
+const BASEURL = 'https://httpbin.org/';
+"""
+
+[[steps]]
+pre = """
+# Async requests
+"""
+
+exec = """
+await fetch(`${BASEURL}post`, {
+  method: 'POST',
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error(`Request failed with status code: ${response.status}`);
+    }
+  })
+  .then(data => {
+    console.log(data);
+  })
+  .catch(error => {
+     throw new Error(`problem with fetch: ${error}`);
+  });
+"""
+
+[[steps]]
+pre = """
+# Expected Errors
+
+Errors are supported and can be ignored, which will desplay them but not interrupt the runbook.
+"""
+exec = """
+throw new Error('Something went wrong but it was expected, part of the docs!');
+"""
+ignore_error = true
+
+[[steps]]
+pre = """
+# Unexpected Errors
+
+But by default, errors will stop the runbook and cause to fail
+"""
+exec = """
+throw new Error('Something went wrong and it was completely unexpected!');
+"""

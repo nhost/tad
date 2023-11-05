@@ -1,0 +1,79 @@
+[global]
+pre = """
+# Basic example
+
+Just a simple example.
+
+## Steps
+"""
+
+env = [
+    'FOO=foo',
+    'BAR=bar',
+]
+
+[[steps]]
+pre = "## Running commands"
+post = "It worked!"
+exec="""\
+ls main.go
+"""
+
+[[steps]]
+pre = "## JSON support"
+post = "And env vars work too!!!"
+exec="""\
+echo "{\\"data\\": {\\"$FOO\\": \\"$BAR\\"}}"
+"""
+
+[[steps]]
+pre = """
+## stoud and stderr (I)
+
+Stdout and stderr is saved as STEP_#N_STDOUT and STEP_#N_STDERR respectively.
+"""
+exec = """\
+echo "some text sent to stdout"
+echo "some text sent to stderr" >&2
+"""
+
+[[steps]]
+pre = """
+## stoud and stderr (II)
+
+You can consume them as any other env var.
+
+"""
+exec="""\
+echo "stdout from step 2: $STEP_3_STDOUT"
+echo "stderr from step 3: $STEP_3_STDERR"
+"""
+
+[[steps]]
+pre = """
+## multiline commands
+
+Are also supported!
+
+"""
+exec="""\
+echo some multiline \\
+  command \\
+  that \\
+  spawns \\
+  many \\
+  lines
+"""
+
+[[steps]]
+pre = """
+Even EOF is supported!
+"""
+
+exec="""\
+cat << EOF
+This is line 1.
+This is line 2.
+This is line 3.
+EOF
+"""

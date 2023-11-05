@@ -1,0 +1,55 @@
+[global]
+pre = """
+# Signin, Signup and Refresh token demo
+"""
+env = [
+    'BASEURL=https://local.auth.nhost.run/v1',
+    'EMAIL=test+129@acme.com',
+    'PASSWORD=sup3rs3cr3t!',
+]
+
+[[steps]]
+pre = """
+# Sign up
+
+It is very easy to sign up
+"""
+exec = """
+set -euo pipefail
+curl -s --fail-with-body -X POST \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"email\\":\\"$EMAIL\\",\\"password\\":\\"$PASSWORD\\"}" \\
+  $BASEURL/signup/email-password | jq
+"""
+
+[[steps]]
+pre = """
+# Sign in
+
+And even easier to sign in
+"""
+
+exec = """
+set -euo pipefail
+curl -s --fail-with-body -X POST \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"email\\":\\"$EMAIL\\",\\"password\\":\\"$PASSWORD\\"}" \\
+  $BASEURL/signin/email-password | jq
+"""
+
+
+[[steps]]
+pre = """
+# Refresh token
+
+Don't forget to refresh your token
+"""
+
+exec = """
+set -euo pipefail
+refreshToken=$(echo $STEP_2_STDOUT | jq -r '.session.refreshToken')
+curl -s --fail-with-body -X POST \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"refreshToken\\":\\"$refreshToken\\"}" \\
+  $BASEURL/token | jq
+"""
